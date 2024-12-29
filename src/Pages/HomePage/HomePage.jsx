@@ -19,6 +19,72 @@ function HomePage() {
   const [flag, setFlag] = useState(false)
 
 
+  const [filteredHotels, setFilteredHotels] = useState([])
+  const [priceRange, setPriceRange] = useState([]);
+  const [rating, setRating] = useState([]);
+  const [city, setCity] = useState([]);
+
+  const handleFilterChange = (type, value, checked) => {
+    console.log("type , value , checked", type, value, checked)
+    if (type === "price") {
+      const updatedPrice = checked
+        ? [...priceRange, value]
+        : priceRange.filter((item) => item !== value);
+      setPriceRange(updatedPrice);
+    } else if (type === "rating") {
+      const updatedRating = checked
+        ? [...rating, value]
+        : rating.filter((item) => item !== value);
+      setRating(updatedRating);
+    } else if (type === "city") {
+      const updatedCity = checked
+        ? [...city, value]
+        : city.filter((item) => item !== value);
+      setCity(updatedCity);
+    }
+  };
+
+  useEffect(() => {
+    const filtered = allHotels.filter((hotel) => {
+      const matchesPrice =
+        priceRange.length === 0 ||
+        priceRange.some((range) => {
+          return hotel.rooms.some((room) => {
+            const price = room.price;
+            if (range === "upto1000") return price <= 1000;
+            if (range === "1001to2000") return price > 1000 && price <= 2000;
+            if (range === "2001to5000") return price > 2000 && price <= 5000;
+            if (range === "above5000") return price > 5000;
+            return false;
+          });
+        });
+      const matchesRating =
+        rating.length === 0 ||
+        rating.some((rate) => {
+          const [min, max] = rate.split("-").map(Number);
+          return hotel.rating >= min && hotel.rating <= max;
+        });
+
+      const matchesCity =
+        city.length === 0 || city.includes(hotel.city.toLowerCase());
+
+      return matchesPrice && matchesRating && matchesCity;
+    });
+
+    console.log("hotels after fikter", filtered)
+
+    setFilteredHotels(filtered);
+  }, [priceRange, rating, city, allHotels]);
+
+  const clearAllFilters = () => {
+    setPriceRange([]);
+    setRating([]);
+    setCity([]);
+    setFilteredHotels(allHotels);
+  };
+
+
+
   const handlePageChange = (page) => {
     if (page < 1) return;
     setCurrentPage(page);
@@ -110,28 +176,78 @@ function HomePage() {
       <div className='explore-hotel'>
         <div className="filters-section">
           <h3>Filters</h3>
-          <button className="clear-button">CLEAR ALL</button>
+          <button className="clear-button" onClick={clearAllFilters}>
+            CLEAR ALL
+          </button>
+
           <div className="filter-group">
             <h4>PRICE RANGE</h4>
-            <label><input type="checkbox" /> Up to Rs. 1000</label>
-            <label><input type="checkbox" /> Rs. 1001 to Rs. 2000</label>
-            <label><input type="checkbox" /> Rs. 2001 to Rs. 5000</label>
-            <label><input type="checkbox" /> Above Rs. 5000</label>
+            <label>
+              <input
+                type="checkbox"
+                onChange={(e) =>
+                  handleFilterChange("price", "upto1000", e.target.checked)
+                }
+              />
+              Up to Rs. 1000
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                onChange={(e) =>
+                  handleFilterChange("price", "1001to2000", e.target.checked)
+                }
+              />
+              Rs. 1001 to Rs. 2000
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                onChange={(e) =>
+                  handleFilterChange("price", "2001to5000", e.target.checked)
+                }
+              />
+              Rs. 2001 to Rs. 5000
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                onChange={(e) =>
+                  handleFilterChange("price", "above5000", e.target.checked)
+                }
+              />
+              Above Rs. 5000
+            </label>
           </div>
+
           <div className="filter-group">
             <h4>RATING</h4>
-            <label><input type="checkbox" /> 0 - 1 Star</label>
-            <label><input type="checkbox" /> 1 - 2 Star</label>
-            <label><input type="checkbox" /> 2 - 3 Star</label>
-            <label><input type="checkbox" /> 3 - 4 Star</label>
-            <label><input type="checkbox" defaultChecked /> 4 - 5 Star</label>
+            {[...Array(5).keys()].map((_, idx) => (
+              <label key={idx}>
+                <input
+                  type="checkbox"
+                  onChange={(e) =>
+                    handleFilterChange("rating", `${idx}-${idx + 1}`, e.target.checked)
+                  }
+                />
+                {idx} - {idx + 1} Star
+              </label>
+            ))}
           </div>
+
           <div className="filter-group">
             <h4>CITY</h4>
-            <label><input type="checkbox" defaultChecked /> Mumbai</label>
-            <label><input type="checkbox" /> Kolkata</label>
-            <label><input type="checkbox" /> Bangalore</label>
-            <label><input type="checkbox" /> Jaipur</label>
+            {["Mumbai", "Kolkata", "Bangalore", "Jaipur"].map((cityName) => (
+              <label key={cityName}>
+                <input
+                  type="checkbox"
+                  onChange={(e) =>
+                    handleFilterChange("city", cityName.toLowerCase(), e.target.checked)
+                  }
+                />
+                {cityName}
+              </label>
+            ))}
           </div>
         </div>
 
@@ -150,7 +266,7 @@ function HomePage() {
           <div className="hotel-cards">
             {
               allHotels.length > 0 ? (
-                allHotels?.map((hotel, index) => {
+                filteredHotels?.map((hotel, index) => {
                   return (
                     <div className="hotel-card">
                       <img src={hotel?.image_url} alt="Hotel" className="hotel-image" />
