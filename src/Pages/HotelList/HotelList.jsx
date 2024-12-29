@@ -1,7 +1,7 @@
 import React from 'react';
-import RoomCard from './components/RoomCard';
-import HotelInfo from './components/HotelInfo';
-import './styles/App.css';
+// import RoomCard from './components/RoomCard';
+// import HotelInfo from './components/HotelInfo';
+// import './styles/App.css';
 
 const App = () => {
   const roomDetails = [

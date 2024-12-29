@@ -1,17 +1,68 @@
-import React , {useEffect , useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import './HomePage.css';
 import { apiConnector } from '../../../utils/apiConnector';
 import { Hotels_API } from '../../../utils/api';
+import Pagination from '../../components/Pagination';
+
+
 
 function HomePage() {
 
-  const [hotelsList , setHotelsList] = useState([])
+  const [query, setQuery] = useState("");
+  const [filteredResults, setFilteredResults] = useState([]);
+
+  const [hotelsList, setHotelsList] = useState([])
+  const [allHotels, setAllHotels] = useState([])
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [hasNextPage, setHasNextPage] = useState(true);
+  const [flag, setFlag] = useState(false)
+
+
+  const handlePageChange = (page) => {
+    if (page < 1) return;
+    setCurrentPage(page);
+  };
+
 
   const fetchHotesList = async () => {
     try {
       const response = await apiConnector({ method: "GET", url: Hotels_API.searchHotels_API })
-      console.log("hotelsList in ", hotelsList)
+      console.log("hotelsList in ", response?.data)
       setHotelsList(response?.data)
+    } catch (error) {
+      console.error(error?.response?.data?.message)
+    }
+  }
+
+  const handleInputChange = (e) => {
+    const value = e.target.value;
+    setQuery(value);
+
+    if (value) {
+      const results = hotelsList.filter((hotel) =>
+        hotel.name.toLowerCase().includes(value.toLowerCase()) ||
+        hotel.city.toLowerCase().includes(value.toLowerCase())
+      );
+
+      console.log("results ", results)
+      setFilteredResults(results);
+    } else {
+      setFilteredResults([]);
+    }
+  };
+
+  const fetchAllHotels = async (page, size = 6) => {
+    try {
+      const response = await apiConnector({ method: "GET", url: Hotels_API.allHotels_API + `?page=${page}&size=${size}` })
+      console.log("allHotels in ", response?.data?.hotels)
+
+      if (response?.data?.hotels.length < 1) {
+        setFlag(true)
+      } else {
+        setFlag(false)
+      }
+      setAllHotels(response?.data?.hotels)
     } catch (error) {
       console.error(error?.response?.data?.message)
     }
@@ -19,7 +70,8 @@ function HomePage() {
 
   useEffect(() => {
     fetchHotesList()
-  },[])
+    fetchAllHotels(currentPage)
+  }, [query, currentPage])
 
   return (
     <div className="homepage">
@@ -30,11 +82,24 @@ function HomePage() {
           commodi cum possimus blanditiis facilis beatae repellendus, autem voluptates ratione delectus architecto quae dolore.
         </p>
         <div className="search-section">
-          <input
-            type="text"
-            className="search-input"
-            placeholder="Type city, place, or hotel name"
-          />
+          <div className="search-box">
+            <input
+              type="text"
+              placeholder="Search..."
+              value={query}
+              onChange={handleInputChange}
+              className="search-input"
+            />
+            {filteredResults.length > 0 && (
+              <ul className="dropdown">
+                {filteredResults.map((item, index) => (
+                  <li key={index} className="dropdown-item">
+                    {item?.name} - {item?.city}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
           <input type="date" className="date-input" placeholder="Check-in" />
           <input type="date" className="date-input" placeholder="Check-out" />
           <input type="number" className="guest-input" defaultValue={2} />
@@ -83,29 +148,33 @@ function HomePage() {
             </select>
           </div>
           <div className="hotel-cards">
-            {Array(6).fill(0).map((_, index) => (
-              <div className="hotel-card" key={index}>
-                <img src="hotel-image.jpg" alt="Hotel" className="hotel-image" />
-                <div className="hotel-info">
-                  <h3>The Peninsula Hotel</h3>
-                  <p>Mumbai</p>
-                  <p>
-                    <span className="price">&#8377; 1700 - 5500</span>
-                    <span className="rating">4.6 &#9733;</span>
-                  </p>
-                  <button className="view-button">View &#8594;</button>
-                </div>
-              </div>
-            ))}
+            {
+              allHotels.length > 0 ? (
+                allHotels?.map((hotel, index) => {
+                  return (
+                    <div className="hotel-card">
+                      <img src={hotel?.image_url} alt="Hotel" className="hotel-image" />
+                      <div className="hotel-info">
+                        <h3>{hotel?.name}</h3>
+                        <p>{hotel?.city}</p>
+                        <p>
+                          <span className="price">&#8377; {hotel?.rooms[0]?.price} - {hotel?.rooms[2]?.price}</span>
+                          <span className="rating">{hotel?.rating} &#9733;</span>
+                        </p>
+                        <button className="view-button">View &#8594;</button>
+                      </div>
+                    </div>
+                  )
+                })
+              ) : (<p>No Hotel Found</p>)
+            }
           </div>
         </div>
       </div>
       <div className="pagination">
-        <button className="prev-button">Prev</button>
-        <button className="page-number active">1</button>
-        <button className="page-number">2</button>
-        <button className="page-number">3</button>
-        <button className="next-button">Next</button>
+        <button className="prev-button" onClick={() => handlePageChange(currentPage - 1)}>Prev</button>
+        <button className="page-number active">{currentPage}</button>
+        <button className="next-button" disabled={flag} onClick={() => handlePageChange(currentPage + 1)}>Next</button>
       </div>
     </div>
   );
