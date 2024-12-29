@@ -10,19 +10,19 @@ const HotelList = () => {
       title: "Grand Couple Room",
       price: 1700,
       capacity: 2,
-      imageUrl: "room-image-url", // Replace with the actual image URL
+      imageUrl: "https://raw.githubusercontent.com/gocomet-india/frontend-hotel-assignment/main/hotels/grand-hotel.jpg", 
     },
     {
       title: "Grand Couple Room",
       price: 1700,
       capacity: 2,
-      imageUrl: "room-image-url",
+      imageUrl: "https://raw.githubusercontent.com/gocomet-india/frontend-hotel-assignment/main/hotels/royal-palace.jpg",
     },
     {
       title: "Grand Couple Room",
       price: 1700,
       capacity: 2,
-      imageUrl: "room-image-url",
+      imageUrl: "https://raw.githubusercontent.com/gocomet-india/frontend-hotel-assignment/main/hotels/oberoi-amarvilas.jpg",
     },
   ];
 
