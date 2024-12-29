@@ -1,0 +1,40 @@
+.room-card {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: 300px;
+    padding: 10px;
+    text-align: center;
+  }
+  
+  .room-image {
+    width: 100%;
+    border-radius: 5px;
+  }
+  
+  .room-title {
+    font-size: 18px;
+    margin: 10px 0;
+  }
+  
+  .room-capacity,
+  .room-price {
+    margin: 5px 0;
+  }
+  
+  .room-actions {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .view-button,
+  .book-button {
+    padding: 5px 10px;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .book-button {
+    background-color: blue;
+    color: white;
+    border-radius: 5px;
+  }

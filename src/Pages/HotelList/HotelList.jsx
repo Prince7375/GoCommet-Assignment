@@ -1,58 +1,47 @@
-import React from "react";
-import "./HotelList.css";
+import React from 'react';
+import RoomCard from './components/RoomCard';
+import HotelInfo from './components/HotelInfo';
+import './styles/App.css';
 
+const App = () => {
+  const roomDetails = [
+    {
+      title: "Grand Couple Room",
+      price: 1700,
+      capacity: 2,
+      imageUrl: "room-image-url", // Replace with the actual image URL
+    },
+    {
+      title: "Grand Couple Room",
+      price: 1700,
+      capacity: 2,
+      imageUrl: "room-image-url",
+    },
+    {
+      title: "Grand Couple Room",
+      price: 1700,
+      capacity: 2,
+      imageUrl: "room-image-url",
+    },
+  ];
 
-
-const rooms = [
-  {
-    title: "Deluxe Room",
-    price: "₹ 5,000/Night",
-    image:   "../../assets/grand-hotel.jpg",
-  },
-  {
-    title: "Executive Room with Balcony",
-    price: "₹ 7,500/Night",
-    image:  "../../assets/grand-hotel.jpg",
-  },
-  {
-    title: "Executive Room with View",
-    price: "₹ 10,000/Night",
-    image:  "../../assets/grand-hotel.jpg",
-  },
-];
-
-function HotelList() {
   return (
-    <section className="room-preview-section">
-      <div className="container">
-        <div className="section-header">
-          <h2 className="section-title">Rooms & Suites</h2>
-          <p className="section-description">
-            Explore our luxurious rooms designed to provide ultimate comfort.
-          </p>
-        </div>
-
-        <div className="room-grid">
-          {rooms.map((room, index) => (
-            <div className="room-card" key={index}>
-              <img
-                src={room.image}
-                alt={room.title}
-                className="room-image"
-              />
-              <div className="room-details">
-                <h3 className="room-title">{room.title}</h3>
-                <p className="room-price">{room.price}</p>
-                <a href="/rooms" className="book-now-button">
-                  Book Now <span className="arrow">→</span>
-                </a>
-              </div>
-            </div>
-          ))}
-        </div>
+    <div className="App">
+      <Header />
+      <div className="room-list">
+        {roomDetails.map((room, index) => (
+          <RoomCard
+            key={index}
+            title={room.title}
+            price={room.price}
+            capacity={room.capacity}
+            imageUrl={room.imageUrl}
+          />
+        ))}
       </div>
-    </section>
+      <HotelInfo />
+    </div>
   );
-}
+};
 
-export default HotelList;
+export default App;

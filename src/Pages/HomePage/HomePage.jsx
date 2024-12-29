@@ -1,7 +1,26 @@
-import React from 'react';
-import './HomePage.css'; // Import external CSS file
+import React , {useEffect , useState} from 'react';
+import './HomePage.css';
+import { apiConnector } from '../../../utils/apiConnector';
+import { Hotels_API } from '../../../utils/api';
 
 function HomePage() {
+
+  const [hotelsList , setHotelsList] = useState([])
+
+  const fetchHotesList = async () => {
+    try {
+      const response = await apiConnector({ method: "GET", url: Hotels_API.searchHotels_API })
+      console.log("hotelsList in ", hotelsList)
+      setHotelsList(response?.data)
+    } catch (error) {
+      console.error(error?.response?.data?.message)
+    }
+  }
+
+  useEffect(() => {
+    fetchHotesList()
+  },[])
+
   return (
     <div className="homepage">
       <div className="hero-section">
@@ -82,12 +101,12 @@ function HomePage() {
         </div>
       </div>
       <div className="pagination">
-          <button className="prev-button">Prev</button>
-          <button className="page-number active">1</button>
-          <button className="page-number">2</button>
-          <button className="page-number">3</button>
-          <button className="next-button">Next</button>
-        </div>
+        <button className="prev-button">Prev</button>
+        <button className="page-number active">1</button>
+        <button className="page-number">2</button>
+        <button className="page-number">3</button>
+        <button className="next-button">Next</button>
+      </div>
     </div>
   );
 }
