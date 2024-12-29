@@ -1,0 +1,35 @@
+.room-booking-form {
+  text-align: left;
+}
+
+.room-image {
+  width: 100%;
+  border-radius: 8px;
+}
+
+.booking-info {
+  margin: 10px 0;
+}
+
+.person-details {
+  margin: 10px 0;
+}
+
+.add-person-button {
+  display: block;
+  margin: 10px 0;
+  background: transparent;
+  border: none;
+  color: blue;
+  cursor: pointer;
+}
+
+.book-button {
+  width: 100%;
+  padding: 10px;
+  background: blue;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
