@@ -2,6 +2,7 @@ import React , {useEffect , useState} from 'react';
 import './HomePage.css';
 import { apiConnector } from '../../../utils/apiConnector';
 import { Hotels_API } from '../../../utils/api';
+import  herobg  from '../../assets/hero-bg.jpg'
 
 function HomePage() {
 
@@ -24,6 +25,7 @@ function HomePage() {
   return (
     <div className="homepage">
       <div className="hero-section">
+        <img src={herobg} />
         <h1>Find the Perfect deal, always.</h1>
         <p>
           Lorem ipsum dolor sit amet consectetur, adipisicing elit. Similique officia non corrupti pariatur aspernatur sint modi

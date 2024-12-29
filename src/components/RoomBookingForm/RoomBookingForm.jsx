@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import RoomFeatures from './RoomFeatures';
-import PersonDetails from './PersonDetails';
+import RoomFeatures from '../RoomFeatures/RoomFeatures';
+import PersonDetails from '../PersonDetails/PersonDetails';
 import './RoomBookingForm.css';
 
 const RoomBookingForm = ({ hotelName, roomName, checkInDate, checkOutDate }) => {
@@ -15,8 +15,8 @@ const RoomBookingForm = ({ hotelName, roomName, checkInDate, checkOutDate }) => 
       <RoomFeatures features={['Free Wi-Fi', 'TV', 'Jacuzzi', 'Balcony']} />
       <div className="booking-info">
         <p>🧑 Person: {personCount}</p>
-        <p>📅 Check-in: <input type="text" placeholder="dd/mm/yyyy" /></p>
-        <p>📅 Check-out: <input type="text" placeholder="dd/mm/yyyy" /></p>
+        <p>📅 Check-in: <input type="date" /></p>
+        <p>📅 Check-out: <input type="date" /></p>
       </div>
       <div className="person-details">
         {[...Array(personCount)].map((_, index) => (
