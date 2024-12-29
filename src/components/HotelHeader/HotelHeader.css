@@ -1,0 +1,17 @@
+.hotel-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.back-button {
+  position: absolute;
+  left: 20px;
+}
+
+.hotel-title {
+  margin: 0;
+}
+
+.hotel-location {
+  color: gray;
+}

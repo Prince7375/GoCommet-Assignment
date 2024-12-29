@@ -1,9 +1,10 @@
 import React from 'react';
-import RoomCard from './components/RoomCard';
-import HotelInfo from './components/HotelInfo';
-import './styles/App.css';
+import RoomCard from '../../components/RoomCard/RoomCard';
+import HotelInfo from '../../components/HotelInfo/HotelInfo';
+import HotelHeader from '../../components/HotelHeader/HotelHeader';
+import './HotelList.css';
 
-const App = () => {
+const HotelList = () => {
   const roomDetails = [
     {
       title: "Grand Couple Room",
@@ -25,9 +26,19 @@ const App = () => {
     },
   ];
 
+  const hotelInfo = {
+    name: "The Peninsula Hotel",
+    location: "Mumbai, India",
+    rating: "4.5",
+  }
+
   return (
     <div className="App">
-      <Header />
+      <HotelHeader 
+        name={hotelInfo.name}
+        location={hotelInfo.location}
+        rating={hotelInfo.rating}
+      />
       <div className="room-list">
         {roomDetails.map((room, index) => (
           <RoomCard
@@ -39,9 +50,11 @@ const App = () => {
           />
         ))}
       </div>
-      <HotelInfo />
+      <HotelInfo 
+        name={hotelInfo.name} 
+      />
     </div>
   );
 };
 
-export default App;
+export default HotelList;
